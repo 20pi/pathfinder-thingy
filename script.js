@@ -177,6 +177,7 @@ const findPath = async () => {
         let node = endNode.parent;
         while (node && node.index !== start.index) {
             node.element.style.backgroundColor = 'plum';
+            node.element.classList.add('path');
             node = node.parent;
         }
     }
