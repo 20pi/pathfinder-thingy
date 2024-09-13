@@ -23,12 +23,13 @@ const addTile = (index) => {
         event.preventDefault();
 
         const obstructed = isObstructed(tile);
-        if (obstructed) {
-            return;
-        }
 
         if (event.button === 1) {
             tile.style.backgroundColor = obstructed ? 'white' : 'black';
+            return;
+        }
+
+        if (obstructed) {
             return;
         }
 
