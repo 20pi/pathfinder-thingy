@@ -191,3 +191,5 @@ document
 document.getElementById('size-slider').onchange = function () {
     size = this.value;
 };
+
+document.getElementById('find-path').addEventListener('click', findPath);

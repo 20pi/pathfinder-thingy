@@ -32,22 +32,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* .size-slider,
-.randomize-button,
-.reset-button {
-    position: absolute;
-    margin: 10px;
-    width: 100px;
-}
-
-.randomize-button {
-    top: 30px;
-}
-
-.size-slider {
-    top: 60px;
-} */
-
 .grid {
     display: grid;
     height: 95vh;
