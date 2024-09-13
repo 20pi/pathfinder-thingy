@@ -34,8 +34,8 @@ body {
 
 .grid {
     display: grid;
-    height: 95vh;
-    width: 95vh;
+    height: 95vmin; /* Use vmin to ensure the height scales proportionally with width */
+    width: 95vmin; /* Use vmin to ensure the width scales proportionally with height */
     background-color: hsl(0, 0%, 30%);
     margin: auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);

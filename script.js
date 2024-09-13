@@ -2,8 +2,11 @@
 
 const grid = document.querySelector('.grid');
 let size = 40;
+
 let start;
 let end;
+
+let pickingStart = true;
 
 const isObstructed = (tile) => tile && tile.style.backgroundColor === 'black';
 
@@ -18,25 +21,30 @@ const addTile = (index) => {
     tile.addEventListener('contextmenu', (event) => event.preventDefault());
     tile.addEventListener('mousedown', function (event) {
         event.preventDefault();
-        switch (event.button) {
-            case 2:
-                eraseIfExists(end);
-                tile.style.backgroundColor = 'yellow';
-                tile.textContent = 'E';
-                end = new Node(index);
-                break;
-            case 0:
-                eraseIfExists(start);
-                tile.style.backgroundColor = 'yellow';
-                tile.textContent = 'S';
-                start = new Node(index);
-                break;
-            case 1:
-                tile.style.backgroundColor = isObstructed(tile)
-                    ? 'white'
-                    : 'black';
-                break;
+
+        const obstructed = isObstructed(tile);
+        if (obstructed) {
+            return;
         }
+
+        if (event.button === 1) {
+            tile.style.backgroundColor = obstructed ? 'white' : 'black';
+            return;
+        }
+
+        if (pickingStart) {
+            eraseIfExists(start);
+            tile.style.backgroundColor = 'yellow';
+            tile.textContent = 'S';
+            start = new Node(index);
+        } else {
+            eraseIfExists(end);
+            tile.style.backgroundColor = 'yellow';
+            tile.textContent = 'E';
+            end = new Node(index);
+        }
+
+        pickingStart = !pickingStart;
     });
     return tile;
 };
@@ -157,7 +165,6 @@ const updateNodes = async (nodes) => {
     for (const node of nodes) {
         if (node.index !== start.index && node.index !== end.index) {
             node.element.style.backgroundColor = 'lightblue';
-            node.element.textContent = Math.round(node.getFCost()).toString();
         }
         await new Promise((resolve) => setTimeout(resolve, 10));
     }
@@ -175,9 +182,11 @@ const findPath = async () => {
 };
 
 const clearTiles = () => {
+    start = null;
+    end = null;
     for (let index = 0; index < grid.children.length; index++) {
         const tile = grid.children[index];
-        if (!isObstructed(tile) && tile.style.backgroundColor !== 'yellow') {
+        if (!isObstructed(tile)) {
             tile.textContent = '';
             tile.style.backgroundColor = 'white';
         }
@@ -185,9 +194,10 @@ const clearTiles = () => {
 };
 
 document.querySelector('.reset-button').addEventListener('click', clearTiles);
-document
-    .querySelector('.randomize-button')
-    .addEventListener('click', () => createGrid(size));
+document.querySelector('.randomize-button').addEventListener('click', () => {
+    clearTiles();
+    createGrid(size);
+});
 document.getElementById('size-slider').onchange = function () {
     size = this.value;
 };
